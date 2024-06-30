@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+  <title>Pricing - Logis Bootstrap Template</title>
+  <meta content="" name="description">
+  <meta content="" name="keywords">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+
+<body class="pricing-page">
+
+  <%- include('menu.html') %>
+
+  <main class="main">
+
+    <!-- Page Title -->
+    <div class="page-title dark-background" data-aos="fade" style="background-image: url(assets/img/page-title-bg.jpg);">
+      <div class="container position-relative">
+        <h1>자산관리</h1>
+        <p></p>
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a href="index.html">Home</a></li>
+            <li class="current">자산관리</li>
+          </ol>
+        </nav>
+      </div>
+    </div><!-- End Page Title -->
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing section">
+
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <span>자산관리</span>
+        <h2>자산관리</h2>
+        <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
+      </div><!-- End Section Title -->
+
+      <div class="container">
+
+        <div class="row gy-4">
+
+          <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
+            <div class="asset-item">
+              <h3>입금</h3>
+              <button class="assetBtn btn btn-primary" data-bs-toggle="modal" data-bs-target="#depositModal">입금 작업</button>
+            </div>
+          </div>
+
+          <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="200">
+            <div class="asset-item">
+              <h3>출금</h3>
+              <button class="assetBtn btn btn-primary" data-bs-toggle="modal" data-bs-target="#withdrawModal">출금 작업</button>
+            </div>
+          </div>
+
+          <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="300">
+            <div class="asset-item">
+              <h3>내역</h3>
+              <button class="assetBtn btn btn-primary" data-bs-toggle="modal" data-bs-target="#historyModal">내역 보기</button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section><!-- End Pricing Section -->
+
+  </main><!-- End #main -->
+
+
+  <!-- Deposit Modal -->
+  <div class="modal fade" id="depositModal" tabindex="-1" aria-labelledby="depositModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="depositModalLabel">입금 작업</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="depositForm">
+          <div class="modal-body">
+            <div>
+              현재 금액 : <span id="depositMoneySpan"></span>
+            </div>
+            <div>
+              금액 : <input name='depositMoney' id="depositMoney" type="number" step="0.01" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            <button type="submit" class="btn btn-primary">입금</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Withdraw Modal -->
+  <div class="modal fade" id="withdrawModal" tabindex="-1" aria-labelledby="withdrawModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="withdrawModalLabel">출금 작업</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="withdrawForm">
+          <div class="modal-body">
+            <div>
+              현재 금액 : <span id="withdrawMoneySpan"></span>
+            </div>
+            <div>
+              금액 : <input name='withdrawMoney' id="withdrawMoney" type="number" step="0.01" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+            <button type="submit" class="btn btn-primary">출금</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- History Modal -->
+  <div class="modal fade" id="historyModal" tabindex="-1" aria-labelledby="historyModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="historyModalLabel">내역 보기</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <table class="table table-striped" id="historyTable">
+            <thead>
+              <tr>
+                <th>금액</th>
+                <th>타입</th>
+                <th>날짜</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- 내용 -->
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      // uid 가져오는 함수
+      function getUidFromCookie() {
+        const uidCookie = document.cookie.split('; ').find(row => row.startsWith('uid='));
+        if (uidCookie) {
+          return uidCookie.split('=')[1];
+        }
+        return null;
+      }
+
+      $('.assetBtn').on('click', function() {
+        const uid = getUidFromCookie();
+        if (!uid) {
+          alert('UID 쿠키가 없습니다.');
+          return;
+        }
+
+        // 서버에 GET 요청 보내기
+        $.ajax({
+          url: '/asset-money',
+          method: 'GET',
+          success: function(data) {
+            console.log('서버에서 받은 데이터:', data);
+            $('#depositMoneySpan').text(data.money); // 입금 모달에 돈 표시
+            $('#withdrawMoneySpan').text(data.money); // 출금 모달에 돈 표시
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            console.error('Error:', textStatus, errorThrown);
+            alert('서버 오류: ' + textStatus);
+          }
+        });
+      });
+      
+       // 입금 폼 제출 처리
+      $('#depositForm').submit(function(event) {
+        event.preventDefault();
+
+        const depositAmount = parseFloat($('#depositMoney').val());
+
+        if (isNaN(depositAmount) || depositAmount <= 0) {
+          alert('올바른 금액을 입력해주세요.');
+          return;
+        }
+
+        const uid = getUidFromCookie();
+        if (!uid) {
+          alert('UID 쿠키가 없습니다.');
+          return;
+        }
+
+        // 서버로 입금 요청
+        $.ajax({
+          url: '/asset_deposit',
+          method: 'POST',
+          data: { depositMoney: depositAmount,
+            userid: uid },
+          success: function(data) {
+            
+            $('#depositModal').modal('hide'); // 모달 닫기
+            alert('입금이 완료되었습니다.');
+
+            // 입금 내역 서버로 전송
+            $.ajax({
+              url: '/history',
+              method: 'POST',
+              data: {
+                amount: depositAmount,
+                type: '입금', // 입금 또는 출금
+                date: new Date().toLocaleString(),
+                userid: uid 
+              },
+              success: function(response) {
+                console.log('입금 내역이 성공적으로 저장되었습니다.');
+              },
+              error: function(jqXHR, textStatus, errorThrown) {
+                console.error('입금 내역 저장 중 오류:', textStatus, errorThrown);
+              }
+            });
+          }
+        });
+      });
+
+      // 출금 폼 제출 처리
+      $('#withdrawForm').submit(function(event) {
+        event.preventDefault();
+
+        const withdrawAmount = parseFloat($('#withdrawMoney').val());
+
+        if (isNaN(withdrawAmount) || withdrawAmount <= 0) {
+          alert('올바른 금액을 입력해주세요.');
+          return;
+        }
+
+        const uid = getUidFromCookie();
+        if (!uid) {
+          alert('UID 쿠키가 없습니다.');
+          return;
+        }
+
+        // 서버로 출금 요청
+        $.ajax({
+          url: '/asset_withdraw',
+          method: 'POST',
+          data: { withdrawMoney: withdrawAmount,
+            userid: uid },
+          success: function(data) {
+            
+            $('#withdrawModal').modal('hide'); // 모달 닫기
+            alert('출금이 완료되었습니다.');
+
+            // 출금 내역 서버로 전송
+            $.ajax({
+              url: '/history',
+              method: 'POST',
+              data: {
+                amount: withdrawAmount,
+                type: '출금', // 입금 또는 출금
+                date: new Date().toLocaleString(),
+                userid: uid // 사용자 ID 또는 식별자
+              },
+              success: function(response) {
+                console.log('출금 내역이 성공적으로 저장되었습니다.');
+              },
+              error: function(jqXHR, textStatus, errorThrown) {
+                console.error('출금 내역 저장 중 오류:', textStatus, errorThrown);
+              }
+            });
+          }
+        });
+      });
+
+      // 내역 보기 버튼 클릭 시
+      $('#historyModal').on('show.bs.modal', function(event) {
+        const uid = getUidFromCookie();
+        if (!uid) {
+          alert('UID 쿠키가 없습니다.');
+          return;
+        }
+
+        // 서버에 GET 요청 보내기
+        $.ajax({
+          url: '/history',
+          method: 'GET',
+          data: { userid: uid }, // uid 전송
+          success: function(data) {
+            console.log('서버에서 받은 내역 데이터:', data);
+            // 테이블에 내역 추가
+            const tableBody = $('#historyTable tbody');
+            tableBody.empty(); // 기존 내용 비우기
+
+            data.forEach(item => {
+              const row = `<tr>
+                            <td>${item.amount}</td>
+                            <td>${item.type}</td>
+                            <td>${item.date}</td>
+                          </tr>`;
+              tableBody.append(row);
+            });
+          },
+          error: function(jqXHR, textStatus, errorThrown) {
+            console.error('내역 불러오기 오류:', textStatus, errorThrown);
+            alert('내역 불러오기 중 오류가 발생했습니다.');
+          }
+        });
+      });
+
+      // 모달 닫기 시 테이블 초기화
+      $('#historyModal').on('hide.bs.modal', function(event) {
+        $('#historyTable tbody').empty(); // 테이블 내용 초기화
+      });
+
+      // 모달 닫기 기능
+      $('.btn-close').on('click', function() {
+        $('.modal').modal('hide');
+      });
+    });
+
+    
+
+  </script>
+
+  <%- include('footer.html') %>
+
+</body>
+
+</html>
